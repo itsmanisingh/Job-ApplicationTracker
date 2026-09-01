@@ -52,3 +52,40 @@ export async function PATCH(request, { params }) {
     );
   }
 }
+
+export async function DELETE(request, { params }) {
+  try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await connectToDatabase();
+
+    const { id } = await params;
+
+    const application = await JobApplication.findOneAndDelete({
+      _id: id,
+      userId: currentUser.userId,
+    });
+
+    if (!application) {
+      return NextResponse.json(
+        { error: "Application not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({
+      message: "Application deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete application error:", error);
+
+    return NextResponse.json(
+      { error: "Failed to delete application" },
+      { status: 500 },
+    );
+  }
+}
