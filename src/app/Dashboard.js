@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   const [applications, setApplications] = useState([]);
 
   useEffect(() => {
@@ -20,6 +23,16 @@ export default function Home() {
 
     fetchApplications();
   }, []);
+
+  async function handleLogout() {
+    const response = await fetch("/api/auth/logout", {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      router.push("/login");
+    }
+  }
 
   const stats = [
     {
@@ -47,14 +60,23 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-6xl px-6 py-10">
-        <header className="mb-10">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Job Application Tracker
-          </h1>
+        <header className="mb-10 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Job Application Tracker
+            </h1>
 
-          <p className="mt-2 text-gray-600">
-            Track and manage your job applications in one place.
-          </p>
+            <p className="mt-2 text-gray-600">
+              Track and manage your job applications in one place.
+            </p>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+          >
+            Logout
+          </button>
         </header>
 
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
