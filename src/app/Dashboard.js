@@ -91,7 +91,10 @@ export default function Home() {
               Recent Applications
             </h2>
 
-            <button className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800">
+            <button
+              onClick={() => router.push("/applications/new")}
+              className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            >
               Add Application
             </button>
           </div>
