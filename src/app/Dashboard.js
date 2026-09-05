@@ -131,9 +131,20 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
-                      {application.status}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+                        {application.status}
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          router.push(`/applications/${application._id}/edit`)
+                        }
+                        className="rounded-lg border border-gray-300 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                      >
+                        Edit
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))
