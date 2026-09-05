@@ -7,6 +7,8 @@ export default function Home() {
   const router = useRouter();
 
   const [applications, setApplications] = useState([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     async function fetchApplications() {
@@ -79,6 +81,20 @@ export default function Home() {
     },
   ];
 
+  const filteredApplications = applications.filter((application) => {
+    const searchText = search.toLowerCase();
+
+    const matchesSearch =
+      application.company.toLowerCase().includes(searchText) ||
+      application.position.toLowerCase().includes(searchText) ||
+      application.location.toLowerCase().includes(searchText);
+
+    const matchesStatus =
+      statusFilter === "All" || application.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-6xl px-6 py-10">
@@ -108,7 +124,7 @@ export default function Home() {
         </section>
 
         <section className="mt-10 rounded-xl bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-xl font-semibold text-gray-900">
               Recent Applications
             </h2>
@@ -121,19 +137,41 @@ export default function Home() {
             </button>
           </div>
 
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <input
+              type="text"
+              placeholder="Search company, position, or location..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="flex-1 rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-black"
+            />
+
+            <select
+              value={statusFilter}
+              onChange={(event) => setStatusFilter(event.target.value)}
+              className="rounded-lg border border-gray-300 px-4 py-2 outline-none focus:border-black"
+            >
+              <option value="All">All Statuses</option>
+              <option value="Applied">Applied</option>
+              <option value="Interview">Interview</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Offer">Offer</option>
+            </select>
+          </div>
+
           <div className="mt-8 space-y-4">
-            {applications.length === 0 ? (
+            {filteredApplications.length === 0 ? (
               <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center">
                 <p className="font-medium text-gray-700">
-                  No applications yet.
+                  No applications found.
                 </p>
 
                 <p className="mt-2 text-sm text-gray-500">
-                  Add your first job application to get started.
+                  Try changing your search or status filter.
                 </p>
               </div>
             ) : (
-              applications.map((application) => (
+              filteredApplications.map((application) => (
                 <div
                   key={application._id}
                   className="rounded-lg border border-gray-200 p-4"
