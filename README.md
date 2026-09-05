@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Job Application Tracker
+
+A full-stack web application for tracking and managing job applications in one place.
+
+Built with Next.js, React, MongoDB, Mongoose, JWT authentication, bcrypt, and Tailwind CSS.
+
+## Features
+
+- User registration and login
+- Secure password hashing with bcrypt
+- JWT-based authentication
+- HttpOnly cookies for authentication
+- User-specific application data
+- Create job applications
+- View job applications
+- Edit job applications
+- Delete job applications
+- Search applications by company, position, or location
+- Filter applications by status
+- Dashboard statistics
+- Loading and error states
+- Responsive UI
+
+## Tech Stack
+
+- **Frontend:** Next.js, React, Tailwind CSS
+- **Backend:** Next.js API Routes
+- **Database:** MongoDB
+- **ODM:** Mongoose
+- **Authentication:** JWT
+- **Password Security:** bcryptjs
+- **Language:** JavaScript
+
+## Application Statuses
+
+The application currently supports the following statuses:
+
+- Applied
+- Interview
+- Rejected
+- Offer
+
+## Project Structure
+
+```text
+src/
+├── app/
+│   ├── api/
+│   │   ├── applications/
+│   │   └── auth/
+│   ├── applications/
+│   │   ├── new/
+│   │   └── [id]/
+│   │       └── edit/
+│   ├── login/
+│   ├── register/
+│   └── Dashboard.js
+│
+├── lib/
+│   ├── auth.js
+│   └── mongodb.js
+│
+└── models/
+    ├── User.js
+    └── JobApplication.js
+```
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/itsmanisingh/Job-ApplicationTracker.git
+cd Job-ApplicationTracker
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the project root:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
+
+Replace the values with your MongoDB connection string and a secure JWT secret.
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Authentication
 
-## Learn More
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login user |
+| POST | `/api/auth/logout` | Logout user |
 
-To learn more about Next.js, take a look at the following resources:
+### Applications
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/applications` | Get user's applications |
+| POST | `/api/applications` | Create an application |
+| GET | `/api/applications/:id` | Get a specific application |
+| PATCH | `/api/applications/:id` | Update an application |
+| DELETE | `/api/applications/:id` | Delete an application |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All application endpoints require authentication.
 
-## Deploy on Vercel
+## Security
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application includes several security measures:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Passwords are hashed using bcrypt before being stored.
+- JWT authentication is used to authenticate users.
+- JWT tokens are stored in HttpOnly cookies.
+- Users can only access their own job applications.
+- Application ownership is verified on update and delete operations.
+- Sensitive environment variables are stored in `.env.local` and excluded from Git.
+
+## Dashboard
+
+The dashboard provides an overview of job applications with statistics for:
+
+- Total Applications
+- Applied
+- Interviews
+- Rejected
+- Offers
+
+It also provides search and status filtering to make managing applications easier.
+
+## Author
+
+**Mani Singh**
+
+GitHub: [@itsmanisingh](https://github.com/itsmanisingh)
+
+## License
+
+This project is for learning and portfolio purposes.
