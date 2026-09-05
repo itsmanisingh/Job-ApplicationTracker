@@ -9,18 +9,27 @@ export default function Home() {
   const [applications, setApplications] = useState([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchApplications() {
-      const response = await fetch("/api/applications");
+      try {
+        const response = await fetch("/api/applications");
 
-      if (!response.ok) {
-        return;
+        const data = await response.json();
+
+        if (!response.ok) {
+          setError(data.error || "Failed to load applications");
+          return;
+        }
+
+        setApplications(data);
+      } catch (error) {
+        setError("Something went wrong. Please try again.");
+      } finally {
+        setLoading(false);
       }
-
-      const data = await response.json();
-
-      setApplications(data);
     }
 
     fetchApplications();
@@ -45,17 +54,24 @@ export default function Home() {
       return;
     }
 
-    const response = await fetch(`/api/applications/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      const response = await fetch(`/api/applications/${id}`, {
+        method: "DELETE",
+      });
 
-    if (!response.ok) {
-      return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Failed to delete application");
+        return;
+      }
+
+      setApplications((previous) =>
+        previous.filter((application) => application._id !== id),
+      );
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
     }
-
-    setApplications((previous) =>
-      previous.filter((application) => application._id !== id),
-    );
   }
 
   const stats = [
@@ -160,7 +176,17 @@ export default function Home() {
           </div>
 
           <div className="mt-8 space-y-4">
-            {filteredApplications.length === 0 ? (
+            {loading ? (
+              <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center">
+                <p className="font-medium text-gray-700">
+                  Loading applications...
+                </p>
+              </div>
+            ) : error ? (
+              <div className="rounded-lg border border-dashed border-red-300 bg-red-50 p-10 text-center">
+                <p className="font-medium text-red-700">{error}</p>
+              </div>
+            ) : filteredApplications.length === 0 ? (
               <div className="rounded-lg border border-dashed border-gray-300 p-10 text-center">
                 <p className="font-medium text-gray-700">
                   No applications found.
