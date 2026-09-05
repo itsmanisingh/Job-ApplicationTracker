@@ -133,7 +133,7 @@ export default function Home() {
           </button>
         </header>
 
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {stats.map((stat) => (
             <StatCard key={stat.title} title={stat.title} value={stat.value} />
           ))}
@@ -202,7 +202,7 @@ export default function Home() {
                   key={application._id}
                   className="rounded-lg border border-gray-200 p-4"
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <h3 className="font-semibold text-gray-900">
                         {application.company}
@@ -217,7 +217,7 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
                         {application.status}
                       </span>
