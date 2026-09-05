@@ -34,6 +34,28 @@ export default function Home() {
     }
   }
 
+  async function handleDelete(id) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this application?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const response = await fetch(`/api/applications/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    setApplications((previous) =>
+      previous.filter((application) => application._id !== id),
+    );
+  }
+
   const stats = [
     {
       title: "Total Applications",
@@ -143,6 +165,13 @@ export default function Home() {
                         className="rounded-lg border border-gray-300 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-gray-100"
                       >
                         Edit
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(application._id)}
+                        className="rounded-lg border border-red-300 px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-50"
+                      >
+                        Delete
                       </button>
                     </div>
                   </div>
